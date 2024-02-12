@@ -6,7 +6,7 @@ import bcrypt from "bcrypt";
 const UserSchema=new Schema({
 
      username:{
-        type:string,
+        type:String,
         required:true,
         unique:true,
         lowercase:true,
@@ -14,37 +14,37 @@ const UserSchema=new Schema({
         index:true
      },
      email:{
-        type:string,
+        type:String,
         required:true,
         unique:true,
         lowercase:true,
         trim:true,
      },
      fullname:{
-        type:string,
+        type:String,
         required:true,
         lowercase:true,
         trim:true,
         index:true
      },
      avator:{
-        type:string, // cloudinary url
+        type:String, // cloudinary url
         required:true,
         
      },
      coverImage:{
-        type:string,// cloudinary url
+        type:String,// cloudinary url
      },
      watchHistory:{
         type:Schema.Types.ObjectId,
         ref:"Video"
      },
      password:{
-        type:string,
+        type:String,
         required:[true,"Password is required"],
      },
      refreshToken:{
-        type:string,
+        type:String,
      },
     },
    
@@ -53,13 +53,13 @@ const UserSchema=new Schema({
     
     })
     //hashing password before saving
-    userSchema.pre("save",async function(next){
+    UserSchema.pre("save",async function(next){
         if(!this.isModified("password")) return next();
         this.password=await bcrypt.hash(this.password,10);
         next();
     })
     //compare password
-    userSchema.methods.isPasswordCorrect=async function(password){
+    UserSchema.methods.isPasswordCorrect=async function(password){
         return  await bcrypt.compare(password,this.password);
     }
     UserSchema.methods.generateToken=function(){
